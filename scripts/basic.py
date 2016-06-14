@@ -1,6 +1,7 @@
 import numpy as np 
 import cv2
 img=cv2.imread("images.png",0)
+print img
 print "Hello World"
 cv2.imshow("google",img) #returns None
 a = cv2.waitKey(0)
