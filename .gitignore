@@ -1,1 +1,6 @@
-*.jpg,*.mp4,frames/,videos/,images/
+*.jpg,*.mp4,*.MOV
+frames,
+videos,
+images,
+faceDetect,
+eyeDetect
