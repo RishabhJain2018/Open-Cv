@@ -32,6 +32,6 @@ for img in imageList:
 			for (ex, ey, ew, eh) in eyes:
 				cv2.rectangle(roi_color, (ex,ey), (ex+ew, ey+eh),(255,0,0),2)
 
-				cv2.imwrite("/home/rishabh/Documents/Open-Cv/eyeDetect/"+str(img),image)
+				cv2.imwrite("/home/rishabh/Documents/Open-Cv/eyeDetect/2.MOV/"+str(img),image)
 			
 cv2.waitKey(0)
