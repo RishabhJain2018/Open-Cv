@@ -5,7 +5,7 @@ import sys
 
 facecascPath=os.popen('pwd').read().replace("\n", "") + "/haarcascade_frontalface_default.xml"
 eyecascPath=os.popen('pwd').read().replace("\n", "") + "/haarcascade_eye.xml"
-framesPath=os.popen('pwd').read().replace("\n", "").replace("scripts", "") + "frames/1.mp4/"
+framesPath=os.popen('pwd').read().replace("\n", "").replace("scripts", "") + "frames/2.MOV/"
 
 imageList = listdir(framesPath)
 
@@ -23,16 +23,19 @@ for img in imageList:
 		faces = faceCascade.detectMultiScale(gray, 1.1, 5)
 
 		for (x,y,w,h) in faces:
+			# for face
+			
 			cv2.rectangle(image, (x,y), (x+w, y+h), (0,255,0),2)
-
 			roi_color = image[y:y+h, x:x+w]
 			roi_gray = gray[y:y+h, x:x+w]
+
+			#for eyes
 
 			eyes = eyeCascade.detectMultiScale(roi_gray)
 			for (ex, ey, ew, eh) in eyes:
 				cv2.rectangle(roi_color, (ex,ey), (ex+ew, ey+eh),(255,0,0),2)
 
-		# cv2.imwrite("/home/rishabh/Documents/Open-Cv/faceEyeDetect/1.mp4/"+str(img),image)
+		# cv2.imwrite("/home/rishabh/Documents/Open-Cv/faceEyeDetect/2.mp4/"+str(img),image)
 			
 cv2.waitKey(0)
 print "All faces and eyes detected."
