@@ -3,7 +3,7 @@ import os
 import cv2
 
 facecascPath=os.popen('pwd').read().replace("\n", "") + "/haarcascade_frontalface_default.xml"
-framesPath=os.popen('pwd').read().replace("\n", "").replace("scripts", "") + "frames1/"
+framesPath=os.popen('pwd').read().replace("\n", "").replace("scripts", "") + "frames/"
 
 imageList = listdir(framesPath)
 
@@ -30,12 +30,12 @@ for img in imageList:
 			#type 1 cropping
 
 			crop_image1 = image[y:y+h, x:x+w]
-			cv2.imwrite("/home/rishabh/Documents/Open-Cv/faceCrop/type1/"+str(img), crop_image1)
+			cv2.imwrite("/home/rishabh/Documents/Open-Cv/faceCrop/type1/1.mp4/"+str(img), crop_image1)
 
 			#type 2 cropping
 
 			crop_image2 = image[y-padding:y+h+padding, x-padding:x+w+padding]
-			cv2.imwrite("/home/rishabh/Documents/Open-Cv/faceCrop/type2/"+ str(img), crop_image2)
+			cv2.imwrite("/home/rishabh/Documents/Open-Cv/faceCrop/type2/1.mp4/"+ str(img), crop_image2)
 			
 print "Face Cropped...!!!"			
 cv2.waitKey(0)

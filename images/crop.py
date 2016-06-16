@@ -1,4 +1,4 @@
-import cv2
+]import cv2
 
 img = cv2.imread("pic2.jpg")
 crop_img = img[200:400, 200:400]
