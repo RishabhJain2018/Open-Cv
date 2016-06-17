@@ -32,7 +32,7 @@ for img in imageList:
 		count = 0
 		for (x,y,w,h) in faces:
 			cv2.rectangle(image, (x,y), (x+w, y+h), (0,255,0),2)
-			cv2.imshow("image00", image)
+			# cv2.imshow("image00", image)
 			cv2.imwrite("/home/rishabh/Documents/Open-Cv/faceEyeDetect/"+str(img),image)
 			count +=1
 			

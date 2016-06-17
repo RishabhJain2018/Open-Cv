@@ -3,9 +3,11 @@ import os
 import cv2
 
 facecascPath=os.popen('pwd').read().replace("\n", "") + "/haarcascade_frontalface_default.xml"
-framesPath=os.popen('pwd').read().replace("\n", "").replace("scripts", "") + "frames/"
+framesPath=os.popen('pwd').read().replace("\n", "").replace("scripts", "") + "frames/2.mp4/"
 
 imageList = listdir(framesPath)
+padding = 15
+count =0
 
 for img in imageList:
 
@@ -18,24 +20,23 @@ for img in imageList:
 		faces = faceCascade.detectMultiScale(
 		gray,
 		scaleFactor = 1.5,
-		minNeighbors = 5,
+		minNeighbors = 1,
 		minSize = (30, 30),
 		flags = cv2.cv.CV_HAAR_SCALE_IMAGE,
 		)
 
-		padding = 15
 
 		for (x,y,w,h) in faces:
 			cv2.rectangle(image, (x,y), (x+w, y+h), (0,255,0),2)
 			#type 1 cropping
 
-			crop_image1 = image[y:y+h, x:x+w]
-			cv2.imwrite("/home/rishabh/Documents/Open-Cv/faceCrop/type1/1.mp4/"+str(img), crop_image1)
-
+		
+		crop_image1 = image[y:y+h, x:x+w]
+		cv2.imwrite("/home/rishabh/Documents/Open-Cv/faceCrop/type1/2.mp4/crop00%d.jpg" %count, crop_image1)
 			#type 2 cropping
+			# crop_image2 = image[y-padding:y+h+padding, x-padding:x+w+padding]
+			# cv2.imwrite("/home/rishabh/Documents/Open-Cv/faceCrop/type2/2.mp4/"+ str(img), crop_image2)
 
-			crop_image2 = image[y-padding:y+h+padding, x-padding:x+w+padding]
-			cv2.imwrite("/home/rishabh/Documents/Open-Cv/faceCrop/type2/1.mp4/"+ str(img), crop_image2)
 			
 print "Face Cropped...!!!"			
 cv2.waitKey(0)
