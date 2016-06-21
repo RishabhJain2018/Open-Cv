@@ -21,22 +21,29 @@ for(x,y,w,h) in faces:
 
 	crop_image1 = image[y:y+h, x:x+w]
 
-gray_img = cv2.cvtColor(crop_image1, cv2.COLOR_BGR2GRAY) 
+gray_img = cv2.cvtColor(crop_image1, cv2.COLOR_BGR2GRAY)
+print gray_img.shape[1] 
 windowsize_c = 10
 windowsize_r = 10
 radius=1
 no_points = 8*radius
-size=(10,10)
-full_lbp = np.zeros(size, dtype='float32')
-print full_lbp
+size=(90,90)
+full_lbp = np.empty(size, dtype='float32')
+print full_lbp.size
 idx = 0
-for r in range(0, gray_img.shape[0]-windowsize_r, windowsize_r):
-	for c in range(0,gray_img.shape[1]-windowsize_c, windowsize_c):
+for r in range(0, gray_img.shape[0], windowsize_r):
+	for c in range(0,gray_img.shape[1], windowsize_c):
 		window=gray_img[r:r+windowsize_r, c:c+windowsize_c]
 		lbp = local_binary_pattern(window,no_points,radius,method='nri_uniform')
-		(hist,_) = np.histogram(lbp.ravel(),bins=np.arange(0,no_points+3),range=(0,no_points+2))
-		lbp = np.sqrt(lbp*1.0/np.sum(lbp))
-		full_lbp[idx:idx+58]=lbp
-		idx+=58
+		# print lbp
+
+		# (hist,_) = np.histogram(lbp.ravel(),bins=np.arange(0,no_points+3),range=(0,no_points+2))
+		np.seterr(divide='ignore', invalid='ignore')
+		lbp = np.sqrt(np.divide(lbp*1.0,np.sum(lbp)))
+		
+		full_lbp = np.append(full_lbp,lbp)
+
+		# full_lbp[idx:idx+100]=lbp
+		# idx+=100
 
 print full_lbp
