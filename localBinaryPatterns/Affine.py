@@ -221,6 +221,7 @@ for file1 in listing1:
             #Perform the actual resizing of the image and show it
             resized = cv2.resize(rotated, dim, interpolation = cv2.INTER_AREA)
             cv2.imshow("Resized " + file2, resized)
+            
             cv2.waitKey()
             cv2.destroyAllWindows()
 
