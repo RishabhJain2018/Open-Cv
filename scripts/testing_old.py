@@ -62,17 +62,13 @@ def process(path_retrieve):
     # Retrieve the file list
     listing1 = os.listdir(path_retrieve)
     print(list(listing1))
-    idx=0
 
-    # Go through the list, picking up each image for facescial detection
+    # Go through the list, picking up each image for facial detection
     #for file1 in listing1:
     #listing2 = os.listdir(path_retrieve + file1)
 
         #Go through each image within the folder
-    size=(10,600,100)
-    t = np.array(size,dtype='float32')
-    # np.savetxt("initialt_{0}.txt".format(str(x for x in range(0,3))), t)
-    print "t.shape",t.shape,t.size
+    t = np.array((10,10),dtype='float32')
     for file2 in listing1:
         if file2.lower().endswith(('.png', '.jpg', '.jpeg')):
 
@@ -90,9 +86,9 @@ def process(path_retrieve):
             image = cv2.imread(path_retrieve + file2)
             image=image[0:250, 0:250]
             cv2.imshow("250 resized", image)
-            cv2.destroyWindow("250 resized")
-            print "image.shape",image.shape
+            print image.shape
             # cv2.imshow("Original " + file2, image)
+            cv2.waitKey()
 
             # Converting to gray, for reduction of noise
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -207,7 +203,6 @@ def process(path_retrieve):
             # Show the points detected
             cv2.imshow(file2 + " w Facial Detection", image)
             cv2.waitKey(0)
-            cv2.destroyWindow(file2 + " w Facial Detection")
 
             # Points required
             pts1 = np.float32([LSLE, RSLE, LSRE, RSRE, Nose, LSL, RSL])
@@ -231,8 +226,6 @@ def process(path_retrieve):
             rotated = cv2.warpAffine(image, A, (w, h))
             cv2.imshow("Rotated " + file2, rotated)
             cv2.waitKey()
-            cv2.destroyWindow("Rotated " + file2)
-
 
             # Resizing image dimensions
             r = height / image.shape[1]
@@ -241,30 +234,29 @@ def process(path_retrieve):
             # Perform the resizing of the image and show it
             print "======"
             resized = cv2.resize(rotated, dim, interpolation = cv2.INTER_AREA)
-            # print resized.flags
+            print resized.flags
 
 #############################          Rishabh          ##################################
 
 
             faces = faceCascade.detectMultiScale(resized,1.3,5)
             for(x,y,w,h) in faces:
-                cv2.rectangle(resized,(x,y),(x+w,y+h),(0,255,0),2)
+                cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,0),2)
 
-                crop_image1 = resized[y:y+h, x:x+w]
+                crop_image1 = image[y:y+h, x:x+w]
                 crop_image1 = crop_image1[0:100, 0:100]
 
             cv2.imshow("tight Crop", crop_image1)
-            print "crop_image1",crop_image1.shape
+            print crop_image1.shape
             cv2.waitKey(0)
-            cv2.destroyWindow("tight Crop")
             gray_img = cv2.cvtColor(crop_image1, cv2.COLOR_BGR2GRAY)
             print "1"
 
             print "cropped image+++++++++", crop_image1.flags
-            # windowsize_r=10
-            # windowsize_c=10
-            # r=10
-            # c=10
+            windowsize_r=10
+            windowsize_c=10
+            r=10
+            c=10
             radius=1
             no_points = 8*radius
         # size = (100,100)
@@ -277,38 +269,26 @@ def process(path_retrieve):
             # cv2.imshow("window", window)
             # cv2.waitKey(1)/
             # print "---45ry38----",window.flags
-            lbp = local_binary_pattern(gray_img, no_points, radius, method='nri_uniform')
+            lbp= local_binary_pattern(gray_img, no_points, radius, method='nri_uniform')
             # np.seterr(divide='ignore', invalid='ignore')
-            # lbp = np.sqrt(np.divide(lbp*1.0, np.sum(lbp)))
-            print "lbp size",lbp.shape
+            lbp = np.sqrt(np.divide(lbp*1.0, np.sum(lbp)))
+            print lbp
             # lbp=lbp.ravel()
             # full_lbp=np.concatenate((full_lbp, lbp))
-            # if path_retrieve == "/home/rishabh/Images (zipped) Folder/testing1/":
-                # return lbp
-
-            t = np.append(t, lbp)
-            print "===========t==========",t
-        # idx+=100
-
-        print "value of t" ,t.shape
-        np.savetxt('t.txt',t)
-        print "************************** Size *********************", t.size
+        t = lbp
+    print "value of t" ,t
     return t
 
 # For setting path of different images classified on basis of smiling and not smiling.
 for i in xrange(1,4):
     if i==1:#for all smiling images
         path_retrieve = "/home/rishabh/Images (zipped) Folder/smiling/"
-        T1=np.array((600,100), dtype='float32')
+        T1=np.array((10,10), dtype='float32')
         T1 = process(path_retrieve)
-        np.savetxt('t1.txt',T1)
-
     elif i==2:#for all not smiling images
         path_retrieve = "/home/rishabh/Images (zipped) Folder/notsmiling/"
-        T2=np.array((600,100), dtype='float32')
+        T2=np.array((10,10), dtype='float32')
         T2 = process(path_retrieve)
-        np.savetxt('t2.txt',T2)
-
     #for all testing images
     elif i==3:
         path_retrieve = "/home/rishabh/Images (zipped) Folder/testing1/"
@@ -330,39 +310,28 @@ print "***********************************************"
 print "=========== X2 ===========", x2.shape, x2.size 
 
 
-x1 = x1.reshape(30000,2)
-print x1
-x2 = x2.reshape(30000,2)
+x1 = x1.reshape(5000,2)
+x2 = x2.reshape(5000,2)
 
 y1 = np.ones(len(x1))
 y2 = np.ones(len(x2)) * -1
 
 X_train = np.vstack((x1, x2))
-print "******************** X_train********************",X_train
 y_train = np.hstack((y1, y2))
-print "******************** Y_train********************",y_train
 
 clf = svm.LinearSVC()
 model = clf.fit(X_train, y_train)
 
 # prediction
 X_test = X_test.reshape(5000,2)
-
+y_test = np.ones(len(X_test))
 # X2_test = X2_test.reshape(50,2)
 # y2_test = np.ones(len(X2_test))
 
 # X_test = np.vstack((X1_test, X2_test))
 # y_test = np.hstack((y1_test, y2_test))
-pred = clf.predict(model, X_test)
-print pred
-#z = decision_function(X_test)
-#print "z=====================", z
-if(pred.any()==1):
-    print "smiling"
-elif(pred.any()==-1):
-    print "not smiling"
-#correct = np.sum(pred == y_test) *1.0/ len(y_test)
+pred = clf.predict(X_test)
+correct = np.sum(pred == y_test) *1.0/ len(y_test)
+print correct
 # total predictions 
-#print "%d out of %d predictions correct" % (np.sum(pred==y_test), len(pred))
-
-
+print "%d out of %d predictions correct" % (np.sum(pred==y_test), len(pred))
